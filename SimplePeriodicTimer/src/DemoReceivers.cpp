@@ -36,7 +36,7 @@ void demoReceivers(){
 	receivers.invoke();
 	MyClass a1("a1"), a2("a2"), a3("a3");
 	cout << "set a1" << endl;
-	receivers.setReceiver(a1);
+	receivers.addReceiver(a1);
 	cout << "hasReceiver(): " << receivers.hasReceiver() << endl;
 	cout << "receivers.invoke()" << endl;
 	receivers.invoke();
@@ -47,15 +47,15 @@ void demoReceivers(){
 	receivers.invoke();
 
 	cout << "set a2" << endl;
-	receivers.setReceiver(a2);
-	receivers.setReceiver(a2);
+	receivers.addReceiver(a2);
+	receivers.addReceiver(a2);
 	receivers.invoke();
 
 	cout << "setCallback(doFlashing_2)" << endl;
 	receivers.setCallback(&MyClass::doSomething_2);
 
 	cout << "set a3" << endl;
-	receivers.setReceiver(a3);
+	receivers.addReceiver(a3);
 	receivers.invoke();
 
 	cout << "remove a2" << endl;

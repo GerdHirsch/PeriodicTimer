@@ -16,7 +16,7 @@ public:
 		for(auto& receiver : receivers) receiver = nullptr;
 	}
 
-	void setReceiver(Receiver& newReceiver){
+	void addReceiver(Receiver& newReceiver){
 		// no more space available
 		if(currentNumReceivers == numReceivers) return;
 

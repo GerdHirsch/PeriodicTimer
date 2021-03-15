@@ -1,9 +1,12 @@
 <testsuites>
-	<testsuite name="AllTests" tests="1">
-		<testcase classname="AllTests" name="thisIsATest">
-			<failure message="../src/Test.cpp:7 thisIsATest: start writing tests">
-thisIsATest: start writing tests
-			</failure>
-		</testcase>
+	<testsuite name="Receiver" tests="8">
+		<testcase classname="Receiver" name="ReceiversTest::invokeEmptyWithoutCallback"/>
+		<testcase classname="Receiver" name="ReceiversTest::invokeEmptyWithCallback"/>
+		<testcase classname="Receiver" name="ReceiversTest::addAndInvokeWithoutCallback"/>
+		<testcase classname="Receiver" name="ReceiversTest::addAndInvoke"/>
+		<testcase classname="Receiver" name="ReceiversTest::addAndRemoveInvoke"/>
+		<testcase classname="Receiver" name="ReceiversTest::changeCallback"/>
+		<testcase classname="Receiver" name="ReceiversTest::add2AndInvoke"/>
+		<testcase classname="Receiver" name="ReceiversTest::addTwiceAndInvoke"/>
 	</testsuite>
 </testsuites>

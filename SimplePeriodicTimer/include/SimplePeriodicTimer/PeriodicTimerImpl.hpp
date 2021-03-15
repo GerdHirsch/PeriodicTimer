@@ -52,8 +52,8 @@ public:
 	{}
 	void addReceiver(Receiver& receiver){
 		Guard guard(myMutex);
-		std::cout << "setReceiver()" << std::endl;
-		receivers.setReceiver(receiver);
+		std::cout << "addReceiver()" << std::endl;
+		receivers.addReceiver(receiver);
 		if(!threadActive){
 			threadActive= true;
 			Thread t(&this_type::run, this);
