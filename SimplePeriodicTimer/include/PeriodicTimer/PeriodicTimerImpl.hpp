@@ -98,6 +98,7 @@ public:
 		using namespace std;
 		Guard guard(myMutex, std::defer_lock);
 		while(true){
+			auto beforeInvoke = std::chrono::steady_clock::now();
 			guard.lock();
 			if(!receivers.hasReceiver()){
 				threadActive = false;
@@ -105,15 +106,10 @@ public:
 				guard.unlock();
 				return; // ends the thread
 			}
-			auto beforeInvoke = std::chrono::steady_clock::now();
 			receivers.invoke();
 			// may changed from receivers
 			std::chrono::nanoseconds intervalDuration(this->intervalDuration);
 			guard.unlock();
-//			auto afterInvoke = std::chrono::steady_clock::now();
-//			auto invokeDuration = afterInvoke - beforeInvoke;
-//
-//			auto nextRun = afterInvoke + (intervalDuration - invokeDuration);
 			auto nextRun = beforeInvoke + intervalDuration;
 			std::this_thread::sleep_until(nextRun);
 //			std::this_thread::sleep_for(intervalDuration); // would be shifting by the processing time of receivers.invoke()
