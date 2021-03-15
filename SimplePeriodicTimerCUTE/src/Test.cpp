@@ -1,6 +1,7 @@
 
 
 #include "../include/ReceiversTest.hpp"
+#include "../include/PeriodicTimerTest.hpp"
 
 #include "cute.h"
 #include "ide_listener.h"
@@ -20,6 +21,7 @@ void runAllTests(int argc, char const *argv[]) {
 //	bool success = runner(s, "AllTests");
 
 	cute::makeRunner(listener,argc,argv)(ReceiversTest::make_suite(), "Receiver");
+	cute::makeRunner(listener,argc,argv)(PeriodicTimerTest::make_suite(), "PeriodicTimer");
 
 }
 

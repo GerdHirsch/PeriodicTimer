@@ -32,6 +32,9 @@ public:
 			}
 		}
 	}
+	void setCallback(MemberFunction function){
+		this->function = function;
+	}
 	void removeReceiver(Receiver& oldReceiver){
 		for(auto& receiver : receivers){
 			if(receiver == &oldReceiver){
@@ -39,21 +42,25 @@ public:
 				--currentNumReceivers;
 			}
 		}
-
 	}
 	bool hasReceiver() const {
 		return currentNumReceivers != 0 && function != nullptr;
 	}
-	void setCallback(MemberFunction function){
-		this->function = function;
+	bool hasCallback(){
+		return function != nullptr;
+	}
+	std::size_t getCurrentNumberOfReceivers(){
+		return currentNumReceivers;
 	}
 	void invoke(){
+		if(function == nullptr) return;
+
 		for(auto receiver : receivers){
-			if(receiver != nullptr && function != nullptr) (receiver->*function)();
+			if(receiver != nullptr) (receiver->*function)();
 		}
 	}
 private:
-	MemberFunction function;
+	MemberFunction function = nullptr;
 	Receiver* receivers[numReceivers];
 	std::size_t currentNumReceivers = 0;
 };

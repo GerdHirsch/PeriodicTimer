@@ -14,10 +14,6 @@
 
 #include "cute.h"
 
-#include <iostream>
-
-#include <type_traits>
-
 class ReceiversTest{
 	using this_type = ReceiversTest;
 	// Tests
@@ -30,7 +26,7 @@ class ReceiversTest{
 	void add2AndInvoke();
 	void addTwiceAndInvoke();
 	// Types
-	using Receivers = ReceiversDemoImpl<MockClassReceivers, 3>;
+	using SUT = ReceiversDemoImpl<MockClassReceivers, 3>;
 public:
 	template<class DerivedTest = this_type>
 	static cute::suite make_suite(){
@@ -49,14 +45,14 @@ public:
 };
 inline
 void ReceiversTest::invokeEmptyWithoutCallback(){
-	Receivers receivers;
+	SUT receivers;
 
 	ASSERTM("hasReceivers false", !receivers.hasReceiver());
 	receivers.invoke();
 }
 inline
 void ReceiversTest::invokeEmptyWithCallback(){
-	Receivers receivers;
+	SUT receivers;
 	receivers.setCallback(&MockClassReceivers::doSomething_1);
 
 	ASSERTM("hasReceivers false", !receivers.hasReceiver());
@@ -64,7 +60,7 @@ void ReceiversTest::invokeEmptyWithCallback(){
 }
 inline
 void ReceiversTest::addAndInvokeWithoutCallback(){
-	Receivers receivers;
+	SUT receivers;
 	MockClassReceivers mock("mock");
 	receivers.addReceiver(mock);
 
@@ -73,32 +69,36 @@ void ReceiversTest::addAndInvokeWithoutCallback(){
 }
 inline
 void ReceiversTest::addAndInvoke(){
-	Receivers receivers;
+	SUT receivers;
 	MockClassReceivers mock("mock");
 	receivers.addReceiver(mock);
 	receivers.setCallback(&MockClassReceivers::doSomething_1);
 
 	ASSERTM("hasReceivers true", receivers.hasReceiver());
 	receivers.invoke();
-	ASSERTM("mock not called", mock.something_1);
+	ASSERTM("mock not called", mock.something_1 == 1);
 }
 
 inline
 void ReceiversTest::addAndRemoveInvoke(){
-	Receivers receivers;
+	SUT receivers;
 	MockClassReceivers mock("mock");
-	receivers.addReceiver(mock);
 	receivers.setCallback(&MockClassReceivers::doSomething_1);
 
+	receivers.addReceiver(mock);
 	ASSERTM("hasReceivers true", receivers.hasReceiver());
+	ASSERTM("numReceivers == 1", receivers.getCurrentNumberOfReceivers() == 1);
+
 	receivers.removeReceiver(mock);
 	ASSERTM("hasReceivers false", !receivers.hasReceiver());
+	ASSERTM("numReceivers == 0", receivers.getCurrentNumberOfReceivers() == 0);
+
 	receivers.invoke();
-	ASSERTM("mock called", !mock.something_1);
+	ASSERTM("mock called", mock.something_1 == 0);
 }
 inline
 void ReceiversTest::changeCallback(){
-	Receivers receivers;
+	SUT receivers;
 	MockClassReceivers mock("mock");
 	receivers.addReceiver(mock);
 	receivers.setCallback(&MockClassReceivers::doSomething_1);
@@ -114,7 +114,7 @@ void ReceiversTest::changeCallback(){
 }
 inline
 void ReceiversTest::add2AndInvoke(){
-	Receivers receivers;
+	SUT receivers;
 	MockClassReceivers mock1("mock1");
 	MockClassReceivers mock2("mock2");
 	receivers.addReceiver(mock1);
@@ -135,7 +135,7 @@ void ReceiversTest::add2AndInvoke(){
 }
 inline
 void ReceiversTest::addTwiceAndInvoke(){
-	Receivers receivers;
+	SUT receivers;
 	MockClassReceivers mock("mock");
 	receivers.addReceiver(mock);
 	receivers.addReceiver(mock);
@@ -143,6 +143,8 @@ void ReceiversTest::addTwiceAndInvoke(){
 
 	ASSERTM("hasReceivers true", receivers.hasReceiver());
 	receivers.invoke();
-	ASSERTM("mock not called", mock.something_1);
+	ASSERTM("mock not called", mock.something_1 == 1);
+	receivers.invoke();
+	ASSERTM("mock not called", mock.something_1 == 2);
 }
 #endif /* INCLUDE_RECEIVERSTEST_HPP_ */

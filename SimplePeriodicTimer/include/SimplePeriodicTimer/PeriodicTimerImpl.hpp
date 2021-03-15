@@ -42,54 +42,67 @@ public:
 	PeriodicTimerImpl()
 	: PeriodicTimerImpl(nullptr, 500)
 	{}
+	PeriodicTimerImpl(unsigned long long intervalDuration)
+	: PeriodicTimerImpl(nullptr, intervalDuration)
+	{}
 	PeriodicTimerImpl(MemberFunction function, unsigned long long intervalDuration=500)
 	: PeriodicTimerImpl(function, IntervalDuration(intervalDuration))
+	{}
+	PeriodicTimerImpl(IntervalDuration intervalDuration=500)
+	: PeriodicTimerImpl(nullptr, intervalDuration)
 	{}
 	PeriodicTimerImpl(MemberFunction function, IntervalDuration intervalDuration)
 	:
 		intervalDuration(intervalDuration),
 		receivers()
 	{}
+
 	void addReceiver(Receiver& receiver){
 		Guard guard(myMutex);
-		std::cout << "addReceiver()" << std::endl;
+		//std::cout << "addReceiver()" << std::endl;
 		receivers.addReceiver(receiver);
-		if(!threadActive){
-			threadActive= true;
-			Thread t(&this_type::run, this);
-			t.detach();
+		if(receivers.hasCallback() && !threadActive){
+			startThread();
+		}
+	}
+	void startThread(){
+		Thread t(&this_type::run, this);
+		threadActive= true;
+		t.detach();
+	}
+	void setCallback(MemberFunction function){
+		Guard guard(myMutex);
+		//std::cout << "Timer::setCallback()" << std::endl;
+		receivers.setCallback(function);
+		if(receivers.hasReceiver() && !threadActive){
+			startThread();
 		}
 	}
 	void removeReceiver(Receiver& receiver){
 //		std::cout << "Timer::removeReceiver()" << " befor Guard" << std::endl;
 		Guard guard(myMutex);
-		std::cout << "Timer::removeReceiver()" << std::endl;
+//		std::cout << "Timer::removeReceiver()" << std::endl;
 		receivers.removeReceiver(receiver);
-	}
-	void setCallback(MemberFunction function){
-		Guard guard(myMutex);
-		std::cout << "Timer::setCallback()" << std::endl;
-		receivers.setCallback(function);
 	}
 	void setIntervalDuration(IntervalDuration intervalDuration){
 		Guard guard(myMutex);
-		std::cout << "Timer::setIntervalDuration(): " << intervalDuration << std::endl;
+		//std::cout << "Timer::setIntervalDuration(): " << intervalDuration << std::endl;
 		this->intervalDuration = intervalDuration;
 	}
 	void setIntervalDuration(unsigned long long intervalDuration){
 		setIntervalDuration(IntervalDuration(intervalDuration));
 	}
+	bool isThreadActive(){
+		Guard guard(myMutex);
+		return threadActive;
+	}
 	// return of Thread callback ends thread
 	void run(){
 		using namespace std;
-
-
 		Guard guard(myMutex, std::defer_lock);
-
-
 		while(true){
 			guard.lock();
-			cout << "run(): " << this_thread::get_id() << endl;
+//			cout << "run(): " << this_thread::get_id() << endl;
 			if(!receivers.hasReceiver()){
 				threadActive = false;
 				cout << "run() thread ended: " << this_thread::get_id() << endl;
@@ -104,7 +117,6 @@ public:
 			auto invokeDuration = afterInvoke - beforeInvoke;
 
 			auto nextRun = afterInvoke + (intervalDuration - invokeDuration);
-
 
 			std::this_thread::sleep_until(nextRun);
 //			std::this_thread::sleep_for(intervalDuration); // would be shifting by the processing time of receivers.invoke()

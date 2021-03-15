@@ -9,4 +9,20 @@
 		<testcase classname="Receiver" name="ReceiversTest::add2AndInvoke"/>
 		<testcase classname="Receiver" name="ReceiversTest::addTwiceAndInvoke"/>
 	</testsuite>
+	<testsuite name="PeriodicTimer" tests="6">
+		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::checkReentrance">
+			<failure message="../src/../include/PeriodicTimerTest.hpp:67 checkReentrance: Three times called">
+checkReentrance: Three times called
+			</failure>
+		</testcase>
+		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::inactiveWithoutCallback"/>
+		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::inactiveWithoutReceiver"/>
+		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::activeAfterSetCallback"/>
+		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::activeAfterAddReceiver"/>
+		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::checkTimingConstraints">
+			<failure message="../src/../include/PeriodicTimerTest.hpp:55 checkTimingConstraints: todo checkTimingConstraints">
+checkTimingConstraints: todo checkTimingConstraints
+			</failure>
+		</testcase>
+	</testsuite>
 </testsuites>
