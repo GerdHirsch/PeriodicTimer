@@ -8,7 +8,7 @@
 #ifndef INCLUDE_RECEIVERSTEST_HPP_
 #define INCLUDE_RECEIVERSTEST_HPP_
 
-#include <PeriodicTimer/ReceiversDemoImpl.hpp>
+#include <PeriodicTimer/ReceiversDefaultImpl.hpp>
 
 #include "../Mocks/MockClassReceivers.hpp"
 

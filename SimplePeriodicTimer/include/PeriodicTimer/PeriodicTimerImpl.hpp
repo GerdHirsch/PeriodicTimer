@@ -3,7 +3,7 @@
 
 #include <PeriodicTimer/DurationStreamOperator.hpp>
 #include <PeriodicTimer/PeriodicTimer.hpp>
-#include <PeriodicTimer/ReceiversDemoImpl.hpp>
+#include <PeriodicTimer/ReceiversDefaultImpl.hpp>
 #include <mutex>
 #include <mutex>
 #include <thread>
@@ -46,7 +46,7 @@ public:
 	PeriodicTimerImpl(MemberFunction function, unsigned long long intervalDuration=500)
 	: PeriodicTimerImpl(function, IntervalDuration(intervalDuration))
 	{}
-	PeriodicTimerImpl(IntervalDuration intervalDuration=500)
+	PeriodicTimerImpl(IntervalDuration intervalDuration)
 	: PeriodicTimerImpl(nullptr, intervalDuration)
 	{}
 	PeriodicTimerImpl(MemberFunction function, IntervalDuration intervalDuration)

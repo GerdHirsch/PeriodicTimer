@@ -1,6 +1,6 @@
 
 
-#include <PeriodicTimer/ReceiversDemoImpl.hpp>
+#include <PeriodicTimer/ReceiversDefaultImpl.hpp>
 #include <functional>
 #include <iostream>
 
