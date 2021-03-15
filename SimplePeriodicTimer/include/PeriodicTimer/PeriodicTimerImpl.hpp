@@ -1,11 +1,9 @@
 #ifndef PERIODICTIMERIMPL_HPP_
 #define PERIODICTIMERIMPL_HPP_
 
-#include "ReceiversDemoImpl.hpp"
-#include "PeriodicTimer.hpp"
-
-#include "DurationStreamOperator.hpp"
-
+#include <PeriodicTimer/DurationStreamOperator.hpp>
+#include <PeriodicTimer/PeriodicTimer.hpp>
+#include <PeriodicTimer/ReceiversDemoImpl.hpp>
 #include <mutex>
 #include <mutex>
 #include <thread>

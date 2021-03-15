@@ -8,9 +8,9 @@
 #ifndef INCLUDE_RECEIVERSTEST_HPP_
 #define INCLUDE_RECEIVERSTEST_HPP_
 
-#include "../Mocks/MockClassReceivers.hpp"
+#include <PeriodicTimer/ReceiversDemoImpl.hpp>
 
-#include <SimplePeriodicTimer/ReceiversDemoImpl.hpp>
+#include "../Mocks/MockClassReceivers.hpp"
 
 #include "cute.h"
 

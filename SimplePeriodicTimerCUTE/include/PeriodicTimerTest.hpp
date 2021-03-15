@@ -9,9 +9,9 @@
 #define INCLUDE_PERIODICTIMERTEST_HPP_
 
 
-#include "../Mocks/MockClassTimer.hpp"
+#include <PeriodicTimer/PeriodicTimerImpl.hpp>
 
-#include <SimplePeriodicTimer/PeriodicTimerImpl.hpp>
+#include "../Mocks/MockClassTimer.hpp"
 
 #include "cute.h"
 

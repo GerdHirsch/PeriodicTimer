@@ -8,7 +8,7 @@
 #ifndef MOCKS_MOCKCLASSTIMER_HPP_
 #define MOCKS_MOCKCLASSTIMER_HPP_
 
-#include <SimplePeriodicTimer/PeriodicTimer.hpp>
+#include <PeriodicTimer/PeriodicTimer.hpp>
 
 class MockClassTimer{
 public:

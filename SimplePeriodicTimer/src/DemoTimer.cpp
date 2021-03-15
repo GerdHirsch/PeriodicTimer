@@ -1,5 +1,4 @@
-#include <SimplePeriodicTimer/PeriodicTimerImpl.hpp>
-
+#include <PeriodicTimer/PeriodicTimerImpl.hpp>
 #include <iostream>
 #include <chrono>
 
