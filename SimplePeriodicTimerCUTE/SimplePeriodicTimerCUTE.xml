@@ -10,11 +10,7 @@
 		<testcase classname="Receiver" name="ReceiversTest::addTwiceAndInvoke"/>
 	</testsuite>
 	<testsuite name="PeriodicTimer" tests="6">
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::checkReentrance">
-			<failure message="../src/../include/PeriodicTimerTest.hpp:67 checkReentrance: Three times called">
-checkReentrance: Three times called
-			</failure>
-		</testcase>
+		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::checkReentrance"/>
 		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::inactiveWithoutCallback"/>
 		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::inactiveWithoutReceiver"/>
 		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::activeAfterSetCallback"/>

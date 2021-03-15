@@ -62,11 +62,6 @@ public:
 			startThread();
 		}
 	}
-	void startThread(){
-		Thread t(&this_type::run, this);
-		threadActive= true;
-		t.detach();
-	}
 	void setCallback(MemberFunction function){
 		Guard guard(myMutex);
 		//std::cout << "Timer::setCallback()" << std::endl;
@@ -92,6 +87,12 @@ public:
 	bool isThreadActive(){
 		Guard guard(myMutex);
 		return threadActive;
+	}
+private:
+	void startThread(){
+		Thread t(&this_type::run, this);
+		threadActive= true;
+		t.detach();
 	}
 	// return of Thread callback ends thread
 	void run(){
