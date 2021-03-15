@@ -5,7 +5,6 @@
 #include <PeriodicTimer/PeriodicTimer.hpp>
 #include <PeriodicTimer/ReceiversDefaultImpl.hpp>
 #include <mutex>
-#include <mutex>
 #include <thread>
 #include <chrono>
 #include <iostream>
