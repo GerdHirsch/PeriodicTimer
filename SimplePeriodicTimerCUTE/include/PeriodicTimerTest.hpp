@@ -24,7 +24,10 @@ class PeriodicTimerTest{
 	void activeAfterSetCallback();
 	void activeAfterAddReceiver();
 	// todo timing tests
-	void checkTimingConstraints();
+	void checkTimingConstraintsRegular();
+	void checkTimingConstraintsToShort();
+	void checkTimingConstraintsLong();
+	void checkTimingConstraintsVeryLong();
 
 	// Types
 	using TimerRepo = DefaultTimerRepository<MockClassTimer, 3>;
@@ -32,7 +35,7 @@ class PeriodicTimerTest{
 	using Mock = MockClassTimer;
 	using Duration = std::chrono::milliseconds;
 	const Duration timerDuration{5};
-	const Duration testDuration{20};
+	const Duration testDuration{25};
 
 public:
 	template<class DerivedTest = this_type>
@@ -44,18 +47,59 @@ public:
 		s.push_back(CUTE_SMEMFUN(DerivedTest, activeAfterSetCallback));
 		s.push_back(CUTE_SMEMFUN(DerivedTest, activeAfterAddReceiver));
 
-		s.push_back(CUTE_SMEMFUN(DerivedTest, checkTimingConstraints));
+		s.push_back(CUTE_SMEMFUN(DerivedTest, checkTimingConstraintsRegular));
+		s.push_back(CUTE_SMEMFUN(DerivedTest, checkTimingConstraintsToShort));
+		s.push_back(CUTE_SMEMFUN(DerivedTest, checkTimingConstraintsLong));
+		s.push_back(CUTE_SMEMFUN(DerivedTest, checkTimingConstraintsVeryLong));
 
 		return s;
 	}
 };
 
 inline
-void PeriodicTimerTest::checkTimingConstraints(){
-	ASSERTM("todo checkTimingConstraints", false);
+void PeriodicTimerTest::checkTimingConstraintsRegular(){
+	using namespace std;
+	SUT sut(10);
+	sut.setCallback(&Mock::checkTimingConstraints);
+	Mock mock("mock", sut);
+	sut.addReceiver(mock);
+	std::this_thread::sleep_for(chrono::milliseconds(150));
+	cout << "end - start: " << chrono::duration_cast<Duration>(mock.end - mock.start) << endl;
+	ASSERTM("Three times called", mock.numCalls == mock.numTimingRuns);
 }
-
-
+inline
+void PeriodicTimerTest::checkTimingConstraintsToShort(){
+	using namespace std;
+	SUT sut(1);
+	sut.setCallback(&Mock::checkTimingConstraints);
+	Mock mock("mock", sut);
+	sut.addReceiver(mock);
+	std::this_thread::sleep_for(chrono::milliseconds(150));
+	cout << "end - start: " << chrono::duration_cast<Duration>(mock.end - mock.start) << endl;
+	ASSERTM("Three times called", mock.numCalls == mock.numTimingRuns);
+}
+inline
+void PeriodicTimerTest::checkTimingConstraintsLong(){
+	using namespace std;
+	SUT sut(100);
+	sut.setCallback(&Mock::checkTimingConstraints);
+	Mock mock("mock", sut);
+	sut.addReceiver(mock);
+	std::this_thread::sleep_for(chrono::milliseconds(1500));
+	cout << "end - start: " << chrono::duration_cast<Duration>(mock.end - mock.start) << endl;
+	ASSERTM("Three times called", mock.numCalls == mock.numTimingRuns);
+}
+inline
+void PeriodicTimerTest::checkTimingConstraintsVeryLong(){
+	using namespace std;
+	SUT sut(300);
+	sut.setCallback(&Mock::checkTimingConstraints);
+	Mock mock("mock", sut);
+	sut.addReceiver(mock);
+	std::this_thread::sleep_for(chrono::milliseconds(4000));
+	cout << "end - start: " << chrono::duration_cast<Duration>(mock.end - mock.start) << endl;
+	ASSERTM("Three times called", mock.numCalls == mock.numTimingRuns);
+}
 inline
 void PeriodicTimerTest::checkReentrance(){
 	SUT sut(timerDuration);
