@@ -37,19 +37,17 @@ public:
 	using Mutex = std::recursive_mutex;
 	using Guard = std::unique_lock<Mutex>;
 
+	// Timers must not be copied
+	PeriodicTimerImpl(PeriodicTimerImpl const&) = delete;
+	PeriodicTimerImpl& operator=(PeriodicTimerImpl const&) = delete;
+
 	PeriodicTimerImpl()
-	: PeriodicTimerImpl(nullptr, 500)
-	{}
-	PeriodicTimerImpl(unsigned long long intervalDuration)
-	: PeriodicTimerImpl(nullptr, intervalDuration)
-	{}
-	PeriodicTimerImpl(MemberFunction function, unsigned long long intervalDuration=500)
-	: PeriodicTimerImpl(function, IntervalDuration(intervalDuration))
+	: PeriodicTimerImpl(nullptr, IntervalDuration(500))
 	{}
 	PeriodicTimerImpl(IntervalDuration intervalDuration)
 	: PeriodicTimerImpl(nullptr, intervalDuration)
 	{}
-	PeriodicTimerImpl(MemberFunction function, IntervalDuration intervalDuration)
+	PeriodicTimerImpl(MemberFunction function, IntervalDuration intervalDuration=IntervalDuration(500))
 	:
 		intervalDuration(intervalDuration),
 		receivers()
@@ -107,7 +105,7 @@ private:
 			guard.lock();
 			if(!receivers.hasReceiver()){
 				threadActive = false;
-				cout << "run() thread ended: " << this_thread::get_id() << endl;
+//				cout << "run() thread ended: " << this_thread::get_id() << endl;
 				guard.unlock();
 				return; // ends the thread
 			}
