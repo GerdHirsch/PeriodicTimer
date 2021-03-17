@@ -1,5 +1,6 @@
 <testsuites>
-	<testsuite name="TimingConstraints" tests="4">
+	<testsuite name="TimingConstraints" tests="5">
+		<testcase classname="TimingConstraints" name="TimingConstraintsTest::checkTimingConstraints_30ms"/>
 		<testcase classname="TimingConstraints" name="TimingConstraintsTest::checkTimingConstraints_50ms"/>
 		<testcase classname="TimingConstraints" name="TimingConstraintsTest::checkTimingConstraints_100ms"/>
 		<testcase classname="TimingConstraints" name="TimingConstraintsTest::checkTimingConstraints_300ms"/>
