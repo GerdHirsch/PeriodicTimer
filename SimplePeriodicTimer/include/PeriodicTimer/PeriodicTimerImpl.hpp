@@ -59,7 +59,7 @@ public:
 		Guard guard(myMutex);
 		//std::cout << "addReceiver()" << std::endl;
 		receivers.addReceiver(receiver);
-		if(receivers.hasCallback() && !threadActive){
+		if(threadToBeActivated()){
 			startThread();
 		}
 	}
@@ -67,7 +67,7 @@ public:
 		Guard guard(myMutex);
 		//std::cout << "Timer::setCallback()" << std::endl;
 		receivers.setCallback(function);
-		if(receivers.hasReceiver() && !threadActive){
+		if(threadToBeActivated()){
 			startThread();
 		}
 	}
@@ -90,6 +90,9 @@ public:
 		return threadActive;
 	}
 private:
+	bool threadToBeActivated(){
+		return receivers.hasCallback() && receivers.hasReceiver() && !threadActive;
+	}
 	void startThread(){
 		Thread t(&this_type::run, this);
 		threadActive= true;
@@ -100,8 +103,8 @@ private:
 		using namespace std;
 		Guard guard(myMutex, std::defer_lock);
 		while(true){
-			auto beforeInvoke = std::chrono::steady_clock::now();
 			guard.lock();
+			auto beforeInvoke = std::chrono::steady_clock::now();
 			if(!receivers.hasReceiver()){
 				threadActive = false;
 				cout << "run() thread ended: " << this_thread::get_id() << endl;
@@ -111,8 +114,8 @@ private:
 			receivers.invoke();
 			// may changed from receivers
 			std::chrono::nanoseconds intervalDuration(this->intervalDuration);
-			guard.unlock();
 			auto nextRun = beforeInvoke + intervalDuration;
+			guard.unlock();
 			std::this_thread::sleep_until(nextRun);
 //			std::this_thread::sleep_for(intervalDuration); // would be shifting by the processing time of receivers.invoke()
 		}

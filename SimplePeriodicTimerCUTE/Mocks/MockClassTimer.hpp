@@ -13,15 +13,17 @@
 
 class MockClassTimer{
 public:
-	MockClassTimer(std::string name, SimplePeriodicTimer::PeriodicTimer<MockClassTimer>& timer):name(std::move(name)), timer(&timer){}
+	MockClassTimer(std::string name, SimplePeriodicTimer::PeriodicTimer<MockClassTimer>& timer)
+	:
+		numCalls(0),
+		name(std::move(name)),
+		timer(&timer){}
+
 	~MockClassTimer(){
 		timer->removeReceiver(*this);
 	}
 	std::size_t numCalls = 0;
-	const std::size_t numReentranceRuns{10};
-
-	decltype(std::chrono::steady_clock::now()) start;
-	decltype(std::chrono::steady_clock::now()) end;
+	const std::size_t numReentranceRuns{3};
 
 	void checkReentrance(){
 		++numCalls;
@@ -29,6 +31,9 @@ public:
 			timer->removeReceiver(*this);
 		}
 	}
+
+	decltype(std::chrono::steady_clock::now()) start;
+	decltype(std::chrono::steady_clock::now()) end;
 	const std::size_t numTimingRuns{10};
 	void checkTimingConstraints(){
 		if(numCalls == 0)
@@ -37,6 +42,15 @@ public:
 		if(numCalls >= numTimingRuns){
 			timer->removeReceiver(*this);
 			end = std::chrono::steady_clock::now();
+		}
+	}
+	void checkShortTimingConstraints(){
+		if(numCalls == 0)
+			start = std::chrono::steady_clock::now();
+		++numCalls;
+		if(numCalls >= numTimingRuns){
+			end = std::chrono::steady_clock::now();
+			timer->removeReceiver(*this);
 		}
 	}
 	std::string name;

@@ -1,23 +1,8 @@
 <testsuites>
-	<testsuite name="Receiver" tests="8">
-		<testcase classname="Receiver" name="ReceiversTest::invokeEmptyWithoutCallback"/>
-		<testcase classname="Receiver" name="ReceiversTest::invokeEmptyWithCallback"/>
-		<testcase classname="Receiver" name="ReceiversTest::addAndInvokeWithoutCallback"/>
-		<testcase classname="Receiver" name="ReceiversTest::addAndInvoke"/>
-		<testcase classname="Receiver" name="ReceiversTest::addAndRemoveInvoke"/>
-		<testcase classname="Receiver" name="ReceiversTest::changeCallback"/>
-		<testcase classname="Receiver" name="ReceiversTest::add2AndInvoke"/>
-		<testcase classname="Receiver" name="ReceiversTest::addTwiceAndInvoke"/>
-	</testsuite>
-	<testsuite name="PeriodicTimer" tests="9">
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::checkReentrance"/>
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::inactiveWithoutCallback"/>
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::inactiveWithoutReceiver"/>
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::activeAfterSetCallback"/>
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::activeAfterAddReceiver"/>
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::checkTimingConstraintsRegular"/>
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::checkTimingConstraintsToShort"/>
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::checkTimingConstraintsLong"/>
-		<testcase classname="PeriodicTimer" name="PeriodicTimerTest::checkTimingConstraintsVeryLong"/>
+	<testsuite name="TimingConstraints" tests="4">
+		<testcase classname="TimingConstraints" name="TimingConstraintsTest::checkTimingConstraints_50ms"/>
+		<testcase classname="TimingConstraints" name="TimingConstraintsTest::checkTimingConstraints_100ms"/>
+		<testcase classname="TimingConstraints" name="TimingConstraintsTest::checkTimingConstraints_300ms"/>
+		<testcase classname="TimingConstraints" name="TimingConstraintsTest::checkTimingConstraints_500ms"/>
 	</testsuite>
 </testsuites>
