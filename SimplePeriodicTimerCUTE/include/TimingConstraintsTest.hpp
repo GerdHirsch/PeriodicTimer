@@ -20,6 +20,7 @@ class TimingConstraintsTest{
 	// timing tests
 	void checkTimingConstraints_1ms();
 	void checkTimingConstraints_10ms();
+	void checkTimingConstraints_20ms();
 	void checkTimingConstraints_30ms();
 	void checkTimingConstraints_50ms();
 	void checkTimingConstraints_100ms();
@@ -31,8 +32,8 @@ class TimingConstraintsTest{
 	using SUT = SimplePeriodicTimer::PeriodicTimerImpl<TimerRepo>;
 	using Mock = MockClassTimer;
 	using Duration = std::chrono::milliseconds;
-	const Duration timerDuration{5};
-	const Duration testDuration{25};
+//	const Duration timerDuration{5};
+//	const Duration testDuration{25};
 
 public:
 	template<class DerivedTest = this_type>
@@ -44,6 +45,7 @@ public:
 		// always to late expected 100 but 148
 		//s.push_back(CUTE_SMEMFUN(DerivedTest, checkTimingConstraints_10ms));
 
+		s.push_back(CUTE_SMEMFUN(DerivedTest, checkTimingConstraints_20ms));
 		s.push_back(CUTE_SMEMFUN(DerivedTest, checkTimingConstraints_30ms));
 		// < +10%
 		s.push_back(CUTE_SMEMFUN(DerivedTest, checkTimingConstraints_50ms));
@@ -101,123 +103,167 @@ void TimingConstraintsTest::checkTimingConstraints_10ms(){
 	ASSERT_EQUAL_DELTAM("10 x 10, 10: ", 100, chrono::duration_cast<Duration>(mock.end - mock.start).count(), 10);
 }
 // toleranz < 10%
+
+inline
+void TimingConstraintsTest::checkTimingConstraints_20ms(){
+	using namespace std;
+	auto timerPeriod = 20;// ms
+
+	SUT sut(timerPeriod);
+	sut.setCallback(&Mock::checkTimingConstraints);
+	Mock mock("mock", sut);
+
+	int expected = timerPeriod * mock.numTimingRuns;
+	auto percent10 = timerPeriod * 0.1 * mock.numTimingRuns;
+
+	sut.addReceiver(mock);
+	//
+	std::this_thread::sleep_for(chrono::milliseconds(expected));
+	while(sut.isThreadActive())
+		std::this_thread::sleep_for(chrono::milliseconds(10));
+
+	ASSERT_EQUALM("times called", mock.numTimingRuns, mock.numCalls);
+	ASSERTM("timer inactive", !sut.isThreadActive());
+
+	auto result = chrono::duration_cast<Duration>(mock.end - mock.start).count();
+
+	ASSERT_EQUAL_DELTAM("10 x 20, 10%: ", expected, result, percent10); //10%
+	ASSERT_EQUAL_DELTAM("10 x 20, 10: ", expected, result, 10);
+}
 inline
 void TimingConstraintsTest::checkTimingConstraints_30ms(){
 	using namespace std;
-	SUT sut(30);
+	auto timerPeriod = 30;// ms
 
-	Mock mock("mock", sut);
-	sut.addReceiver(mock);
+	SUT sut(timerPeriod);
 	sut.setCallback(&Mock::checkTimingConstraints);
+	Mock mock("mock", sut);
 
+	int expected = timerPeriod * mock.numTimingRuns;
+	auto percent10 = timerPeriod * 0.1 * mock.numTimingRuns;
+
+	sut.addReceiver(mock);
+	//
+	std::this_thread::sleep_for(chrono::milliseconds(expected));
 	while(sut.isThreadActive())
-		std::this_thread::sleep_for(chrono::milliseconds(500));
+		std::this_thread::sleep_for(chrono::milliseconds(10));
 
 	ASSERT_EQUALM("times called", mock.numTimingRuns, mock.numCalls);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 
-	int expected = 300;
 	auto result = chrono::duration_cast<Duration>(mock.end - mock.start).count();
-														// toleranz
-	ASSERT_EQUAL_DELTAM("10 x 50, 50: ", expected, result, 50);
-	ASSERT_EQUAL_DELTAM("10 x 50, 40: ", expected, result, 40);
-	ASSERT_EQUAL_DELTAM("10 x 50, 30: ", expected, result, 30);
-	// outside toleranz
-	//	ASSERT_EQUAL_DELTAM("10 x 50, 10: ", expected, chrono::duration_cast<Duration>(mock.end - mock.start).count(), 10);
+
+	ASSERT_EQUAL_DELTAM("10 x 30, 10%: ", expected, result, percent10); //10%
+	ASSERT_EQUAL_DELTAM("10 x 30, 10: ", expected, result, 10);
 }
+
 inline
 void TimingConstraintsTest::checkTimingConstraints_50ms(){
 	using namespace std;
-	SUT sut(50);
+	auto timerPeriod = 50;// ms
 
-	Mock mock("mock", sut);
-	sut.addReceiver(mock);
+	SUT sut(timerPeriod);
 	sut.setCallback(&Mock::checkTimingConstraints);
+	Mock mock("mock", sut);
 
+	int expected = timerPeriod * mock.numTimingRuns;
+	auto percent10 = timerPeriod * 0.1 * mock.numTimingRuns;
+
+	sut.addReceiver(mock);
+	//
+	std::this_thread::sleep_for(chrono::milliseconds(expected));
 	while(sut.isThreadActive())
-		std::this_thread::sleep_for(chrono::milliseconds(500));
+		std::this_thread::sleep_for(chrono::milliseconds(10));
 
 	ASSERT_EQUALM("times called", mock.numTimingRuns, mock.numCalls);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 
-	int expected = 500;
 	auto result = chrono::duration_cast<Duration>(mock.end - mock.start).count();
 
-	ASSERT_EQUAL_DELTAM("10 x 50, 50: ", expected, result, 70);
-//	ASSERT_EQUAL_DELTAM("10 x 50, 50: ", expected, result, 60);
-//	ASSERT_EQUAL_DELTAM("10 x 50, 40: ", expected, result, 40);
-	// outside toleranz
-	//	ASSERT_EQUAL_DELTAM("10 x 50, 10: ", expected, result, 10);
+	ASSERT_EQUAL_DELTAM("10 x 50, 70: ", expected, result, 70);
+	ASSERT_EQUAL_DELTAM("10 x 50, 10%: ", expected, result, percent10); //10%
 }
+
 inline
 void TimingConstraintsTest::checkTimingConstraints_100ms(){
 	using namespace std;
-	SUT sut(100);
+	auto timerPeriod = 100;// ms
+
+	SUT sut(timerPeriod);
 	sut.setCallback(&Mock::checkTimingConstraints);
 	Mock mock("mock", sut);
-	sut.addReceiver(mock);
 
+	int expected = timerPeriod * mock.numTimingRuns;
+	auto percent10 = timerPeriod * 0.1 * mock.numTimingRuns;
+
+	sut.addReceiver(mock);
+	//
+	std::this_thread::sleep_for(chrono::milliseconds(expected));
 	while(sut.isThreadActive())
-		std::this_thread::sleep_for(chrono::milliseconds(300));
+		std::this_thread::sleep_for(chrono::milliseconds(10));
 
 	ASSERT_EQUALM("times called", mock.numTimingRuns, mock.numCalls);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 
-	int expected = 1000;
 	auto result = chrono::duration_cast<Duration>(mock.end - mock.start).count();
 
-	ASSERT_EQUAL_DELTAM("10 x 100, 50: ", expected, result, 40);
-//	ASSERT_EQUAL_DELTAM("10 x 100, 30: ", expected, result, 30);
-//	ASSERT_EQUAL_DELTAM("10 x 100, 10: ", expected, result, 10);
+	ASSERT_EQUAL_DELTAM("10 x 100, 10%: ", expected, result, percent10); //10%
+	ASSERT_EQUAL_DELTAM("10 x 100, 40: ", expected, result, 40);
 }
+
 inline
 void TimingConstraintsTest::checkTimingConstraints_300ms(){
 	using namespace std;
-	SUT sut(300);
+	auto timerPeriod = 300;// ms
+
+	SUT sut(timerPeriod);
 	sut.setCallback(&Mock::checkTimingConstraints);
 	Mock mock("mock", sut);
+
+	int expected = timerPeriod * mock.numTimingRuns;
+	auto percent10 = timerPeriod * 0.1 * mock.numTimingRuns;
+
 	sut.addReceiver(mock);
-
+	//
+	std::this_thread::sleep_for(chrono::milliseconds(expected));
 	while(sut.isThreadActive())
-		std::this_thread::sleep_for(chrono::milliseconds(500));
-
-	cout << "end - start: " << chrono::duration_cast<Duration>(mock.end - mock.start) << endl;
+		std::this_thread::sleep_for(chrono::milliseconds(10));
 
 	ASSERT_EQUALM("times called", mock.numTimingRuns, mock.numCalls);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 
-	int expected = 3000;
 	auto result = chrono::duration_cast<Duration>(mock.end - mock.start).count();
 
-	ASSERT_EQUAL_DELTAM("10 x 300, 500: ", expected, result, 500);
-	ASSERT_EQUAL_DELTAM("10 x 300, 300: ", expected, result, 300);
-//	ASSERT_EQUAL_DELTAM("10 x 300, 100: ", expected, result, 100);
+	ASSERT_EQUAL_DELTAM("10 x 300, 10%: ", expected, result, percent10); //10%
+//	ASSERT_EQUAL_DELTAM("10 x 300, 150: ", expected, result, 150);
 }
 inline
 void TimingConstraintsTest::checkTimingConstraints_500ms(){
 	using namespace std;
-	SUT sut(500);
+	auto timerPeriod = 500;// ms
+
+	SUT sut(timerPeriod);
 	sut.setCallback(&Mock::checkTimingConstraints);
 	Mock mock("mock", sut);
+
+	int expected = timerPeriod * mock.numTimingRuns;
+	auto percent10 = timerPeriod * 0.1 * mock.numTimingRuns;
+
 	sut.addReceiver(mock);
-
+	//
+	std::this_thread::sleep_for(chrono::milliseconds(expected));
 	while(sut.isThreadActive())
-		std::this_thread::sleep_for(chrono::milliseconds(500));
-
-	cout << "end - start: " << chrono::duration_cast<Duration>(mock.end - mock.start) << endl;
+		std::this_thread::sleep_for(chrono::milliseconds(10));
 
 	ASSERT_EQUALM("times called", mock.numTimingRuns, mock.numCalls);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 
-	int expected = 5000;
 	auto result = chrono::duration_cast<Duration>(mock.end - mock.start).count();
 
-	ASSERT_EQUAL_DELTAM("10 x 500, 500: ", expected, result, 500);
+	ASSERT_EQUAL_DELTAM("10 x 500, 10%: ", expected, result, percent10); //10%
 //	ASSERT_EQUAL_DELTAM("10 x 500, 400: ", expected, result, 400);
 //	ASSERT_EQUAL_DELTAM("10 x 500, 300: ", expected, result, 300);
 //	ASSERT_EQUAL_DELTAM("10 x 500, 100: ", expected, result, 100);
 }
-
-
 
 #endif /* INCLUDE_TIMINGCONSTRAINTSTEST_HPP_ */
