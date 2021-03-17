@@ -28,9 +28,8 @@ class PeriodicTimerTest{
 	using TimerRepo = SimplePeriodicTimer::DefaultTimerRepository<MockClassTimer, 3>;
 	using SUT = SimplePeriodicTimer::PeriodicTimerImpl<TimerRepo>;
 	using Mock = MockClassTimer;
-	using Duration = std::chrono::milliseconds;
-	const Duration timerDuration{5};
-	const Duration testDuration{25};
+	using Duration = SUT::IntervalDuration;
+	const unsigned int timerPeriod{5};
 
 public:
 	template<class DerivedTest = this_type>
@@ -42,63 +41,76 @@ public:
 		s.push_back(CUTE_SMEMFUN(DerivedTest, activeAfterSetCallback));
 		s.push_back(CUTE_SMEMFUN(DerivedTest, activeAfterAddReceiver));
 
-
 		return s;
 	}
 };
 
 inline
 void PeriodicTimerTest::checkReentrance(){
-	SUT sut(timerDuration);
+	SUT sut((Duration(timerPeriod)));
 	sut.setCallback(&Mock::checkReentrance);
 	Mock mock("mock", sut);
+	auto expected = mock.numReentranceRuns;
 	sut.addReceiver(mock);
 
-	std::this_thread::sleep_for(testDuration);
+	std::this_thread::sleep_for(Duration(expected*timerPeriod));
+	while(sut.isThreadActive())
+		std::this_thread::sleep_for(Duration(timerPeriod));
 
-	ASSERT_EQUALM("times called", mock.numReentranceRuns, mock.numCalls);
+
+	ASSERT_EQUALM("times called", expected, mock.numCalls);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 }
 inline
 void PeriodicTimerTest::inactiveWithoutCallback(){
-	SUT sut(timerDuration);
+	SUT sut((Duration(timerPeriod)));
 	Mock mock("mock", sut);
 	sut.addReceiver(mock);
-	std::this_thread::sleep_for(testDuration);
 
 	ASSERTM("timer inactive", !sut.isThreadActive());
 }
 inline
 void PeriodicTimerTest::inactiveWithoutReceiver(){
-	SUT sut(timerDuration);
+	SUT sut((Duration(timerPeriod)));
 	sut.setCallback(&Mock::checkReentrance);
-	std::this_thread::sleep_for(testDuration);
 
 	ASSERTM("timer inactive", !sut.isThreadActive());
 }
 inline
 void PeriodicTimerTest::activeAfterSetCallback(){
-	SUT sut(timerDuration);
+	SUT sut((Duration(timerPeriod)));
 	Mock mock("mock", sut);
+	auto expected = mock.numReentranceRuns;
+
 	sut.addReceiver(mock);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 	sut.setCallback(&Mock::checkReentrance);
 	ASSERTM("timer active", sut.isThreadActive());
-	sut.removeReceiver(mock);
-	std::this_thread::sleep_for(testDuration);
+
+	std::this_thread::sleep_for(Duration(expected*timerPeriod));
+	while(sut.isThreadActive())
+		std::this_thread::sleep_for(Duration(timerPeriod));
+
+	ASSERT_EQUALM("times called", expected, mock.numCalls);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 }
 inline
 void PeriodicTimerTest::activeAfterAddReceiver(){
-	SUT sut(timerDuration);
+	SUT sut((Duration(timerPeriod)));
 	sut.setCallback(&Mock::checkReentrance);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 
 	Mock mock("mock", sut);
+	auto expected = mock.numReentranceRuns;
+
 	sut.addReceiver(mock);
 	ASSERTM("timer active", sut.isThreadActive());
-	sut.removeReceiver(mock);
-	std::this_thread::sleep_for(testDuration);
+
+	std::this_thread::sleep_for(Duration(expected*timerPeriod));
+	while(sut.isThreadActive())
+		std::this_thread::sleep_for(Duration(timerPeriod));
+
+	ASSERT_EQUALM("times called", expected, mock.numCalls);
 	ASSERTM("timer inactive", !sut.isThreadActive());
 }
 #endif /* INCLUDE_PERIODICTIMERTEST_HPP_ */

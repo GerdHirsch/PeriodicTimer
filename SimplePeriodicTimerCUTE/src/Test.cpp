@@ -21,8 +21,8 @@ void runAllTests(int argc, char const *argv[]) {
 //	auto runner = cute::makeRunner(lis, argc, argv);
 //	bool success = runner(s, "AllTests");
 
-//	cute::makeRunner(listener,argc,argv)(ReceiversTest::make_suite(), "Receiver");
-//	cute::makeRunner(listener,argc,argv)(PeriodicTimerTest::make_suite(), "PeriodicTimer");
+	cute::makeRunner(listener,argc,argv)(ReceiversTest::make_suite(), "Receivers");
+	cute::makeRunner(listener,argc,argv)(PeriodicTimerTest::make_suite(), "PeriodicTimer");
 	cute::makeRunner(listener,argc,argv)(TimingConstraintsTest::make_suite(), "TimingConstraints");
 
 }
