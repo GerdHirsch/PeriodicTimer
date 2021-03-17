@@ -1,7 +1,8 @@
 # PeriodicTimer
 A std::thread based Simple Periodic Timer for multiple Receivers
 
-see demos in src and tests in SimplePeriodicTimerCUTE
+see demos in src and tests in SimplePeriodicTimerCUTE   
+the timer object must not expire before the detached thread ends
 ## timing constraints test 
 between 1 ms and 500 ms   
 periods < 30 ms are not applicable on Windows
