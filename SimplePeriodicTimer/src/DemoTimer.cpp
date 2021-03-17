@@ -78,6 +78,8 @@ void demoTimer(){
 	std::cout << "removeReceiver a2" << std::endl;
 	timer.removeReceiver(a2);
 	std::cout << "demoTimer sleep " << this_thread::get_id() << std::endl;
+
+	// the timer object must not expire before the detached thread ends
 	std::this_thread::sleep_for(sleepDuration);
 	cout << "end demoTimer()" << endl;
 }
@@ -121,7 +123,9 @@ void demo2Timer(){
 	std::cout << "demoTimer sleep " << this_thread::get_id() << std::endl;
 	std::this_thread::sleep_for(sleepDuration);
 	timer2.removeReceiver(a1);
-
+// the timer object must not expire before the detached thread ends
+	std::cout << "demoTimer sleep " << this_thread::get_id() << std::endl;
+	std::this_thread::sleep_for(sleepDuration);
 	cout << "end demo2Timer()" << endl;
 
 }
