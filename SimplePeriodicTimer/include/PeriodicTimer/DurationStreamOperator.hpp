@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <iostream>
+//namespace PeriodicTimer{
 
 template<class Rep, class Period>
 std::ostream& operator<<(std::ostream& out, std::chrono::duration<Rep, Period> duration){
@@ -10,6 +11,7 @@ std::ostream& operator<<(std::ostream& out, std::chrono::duration<Rep, Period> d
 	return out;
 }
 
+//} // namespace PeriodicTimer
 
 
 

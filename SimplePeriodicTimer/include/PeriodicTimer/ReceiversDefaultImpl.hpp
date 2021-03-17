@@ -3,6 +3,8 @@
 
 #include <cstddef> // size_t
 
+namespace SimplePeriodicTimer{
+
 template<class Receiver_, std::size_t numReceivers>
 class ReceiversDemoImpl{
 public:
@@ -65,6 +67,7 @@ private:
 	std::size_t currentNumReceivers = 0;
 };
 
+} //namespace SimplePeriodicTimer
 
 
 #endif /* RECEIVERSDEMOIMPL_HPP_ */

@@ -30,8 +30,8 @@ class PeriodicTimerTest{
 	void checkTimingConstraintsVeryLong();
 
 	// Types
-	using TimerRepo = DefaultTimerRepository<MockClassTimer, 3>;
-	using SUT = PeriodicTimerImpl<TimerRepo>;
+	using TimerRepo = SimplePeriodicTimer::DefaultTimerRepository<MockClassTimer, 3>;
+	using SUT = SimplePeriodicTimer::PeriodicTimerImpl<TimerRepo>;
 	using Mock = MockClassTimer;
 	using Duration = std::chrono::milliseconds;
 	const Duration timerDuration{5};

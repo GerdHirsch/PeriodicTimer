@@ -9,6 +9,7 @@
 #include <chrono>
 #include <iostream>
 
+namespace SimplePeriodicTimer{
 
 template<class Receiver_, std::size_t numReceivers_, class IntervalDuration_=std::chrono::milliseconds>
 struct DefaultTimerRepository{
@@ -123,6 +124,6 @@ private:
 	Receivers receivers;
 };
 
-
+} //namespace SimplePeriodicTimer
 
 #endif /* PERIODICTIMERIMPL_HPP_ */

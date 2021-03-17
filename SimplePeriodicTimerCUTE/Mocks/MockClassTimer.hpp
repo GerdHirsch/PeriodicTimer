@@ -13,7 +13,7 @@
 
 class MockClassTimer{
 public:
-	MockClassTimer(std::string name, PeriodicTimer<MockClassTimer>& timer):name(std::move(name)), timer(&timer){}
+	MockClassTimer(std::string name, SimplePeriodicTimer::PeriodicTimer<MockClassTimer>& timer):name(std::move(name)), timer(&timer){}
 	~MockClassTimer(){
 		timer->removeReceiver(*this);
 	}
@@ -40,7 +40,7 @@ public:
 		}
 	}
 	std::string name;
-	PeriodicTimer<MockClassTimer>* timer;
+	SimplePeriodicTimer::PeriodicTimer<MockClassTimer>* timer;
 };
 
 

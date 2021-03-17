@@ -7,7 +7,7 @@ using namespace std;
 namespace{
 class MyClass{
 public:
-	MyClass(std::string name, PeriodicTimer<MyClass>& timer):name(std::move(name)), timer(&timer){}
+	MyClass(std::string name, SimplePeriodicTimer::PeriodicTimer<MyClass>& timer):name(std::move(name)), timer(&timer){}
 	~MyClass(){
 		timer->removeReceiver(*this);
 	}
@@ -16,10 +16,11 @@ public:
 		std::cout << name << std::endl;
 	}
 	std::string name;
-	PeriodicTimer<MyClass>* timer;
+	SimplePeriodicTimer::PeriodicTimer<MyClass>* timer;
 };
 
 }
+namespace PT = SimplePeriodicTimer;
 
 void demoTimer(){
 	std::cout << __PRETTY_FUNCTION__ << std::endl;
@@ -27,9 +28,9 @@ void demoTimer(){
 	using IntervalDuration = std::chrono::milliseconds;
 	IntervalDuration sleepDuration(2500);
 
-	using TimerRepo = DefaultTimerRepository<MyClass, 3>;
-	PeriodicTimerImpl<TimerRepo> timerImpl;
-	PeriodicTimer<MyClass> & timer = timerImpl;
+	using TimerRepo = PT::DefaultTimerRepository<MyClass, 3>;
+	PT::PeriodicTimerImpl<TimerRepo> timerImpl;
+	PT::PeriodicTimer<MyClass> & timer = timerImpl;
 
 	timer.setCallback(&MyClass::doSomething);
 	timer.setIntervalDuration(500);
@@ -87,9 +88,9 @@ void demo2Timer(){
 	using IntervalDuration = std::chrono::milliseconds;
 	IntervalDuration sleepDuration(2500);
 
-	using TimerRepo = DefaultTimerRepository<MyClass, 3>;
-	PeriodicTimerImpl<TimerRepo> timer1(&MyClass::doSomething);
-	PeriodicTimerImpl<TimerRepo> timer2(&MyClass::doSomething);
+	using TimerRepo = PT::DefaultTimerRepository<MyClass, 3>;
+	PT::PeriodicTimerImpl<TimerRepo> timer1(&MyClass::doSomething);
+	PT::PeriodicTimerImpl<TimerRepo> timer2(&MyClass::doSomething);
 
 	MyClass a1("a1", timer1), a2("a2", timer2);
 

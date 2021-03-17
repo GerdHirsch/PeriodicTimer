@@ -26,7 +26,7 @@ class ReceiversTest{
 	void add2AndInvoke();
 	void addTwiceAndInvoke();
 	// Types
-	using SUT = ReceiversDemoImpl<MockClassReceivers, 3>;
+	using SUT = SimplePeriodicTimer::ReceiversDemoImpl<MockClassReceivers, 3>;
 public:
 	template<class DerivedTest = this_type>
 	static cute::suite make_suite(){

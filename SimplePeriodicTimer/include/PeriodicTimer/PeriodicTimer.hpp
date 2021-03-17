@@ -1,6 +1,7 @@
 #ifndef PERIODICTIMER_HPP_
 #define PERIODICTIMER_HPP_
 
+namespace SimplePeriodicTimer{
 
 template<class Receiver>
 class PeriodicTimer{
@@ -12,4 +13,5 @@ public:
 	virtual void setIntervalDuration(unsigned long long intervalDuration)=0;
 };
 
+} // namespace SimplePeriodicTimer
 #endif /* PERIODICTIMER_HPP_ */

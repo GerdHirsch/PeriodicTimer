@@ -20,6 +20,7 @@ public:
 };
 
 }
+using namespace SimplePeriodicTimer;
 
 void demoReceivers(){
 	cout << __PRETTY_FUNCTION__ << endl;
