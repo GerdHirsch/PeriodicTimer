@@ -88,6 +88,9 @@ public:
 		return threadActive;
 	}
 private:
+	//================================
+	// will be called under guard
+	//================================
 	bool threadToBeActivated(){
 		return receivers.canBeInvoked() && !threadActive;
 	}
@@ -96,7 +99,7 @@ private:
 		threadActive= true;
 		t.detach();
 	}
-	// return of Thread callback ends thread
+	// return of Thread callback run() ends thread
 	void run(){
 		using namespace std;
 		Guard guard(myMutex, std::defer_lock);
@@ -115,7 +118,9 @@ private:
 			guard.unlock();
 			auto nextRun = beforeInvoke + intervalDuration;
 			std::this_thread::sleep_until(nextRun);
-//			std::this_thread::sleep_for(intervalDuration); // would be shifting by the processing time of receivers.invoke()
+
+			// would be shifting by the processing time of receivers.invoke()
+//			std::this_thread::sleep_for(intervalDuration);
 		}
 	}
 private:
