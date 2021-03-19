@@ -55,7 +55,9 @@ void ReceiversTest::invokeEmptyWithCallback(){
 	SUT receivers;
 	receivers.setCallback(&MockClassReceivers::doSomething_1);
 
-	ASSERTM("hasReceivers false", !receivers.hasReceiver());
+	ASSERTM("hasReceiver", !receivers.hasReceiver());
+	ASSERTM("hasCallback", receivers.hasCallback());
+	ASSERTM("canBeInvoked", !receivers.canBeInvoked());
 	receivers.invoke();
 }
 inline
@@ -64,7 +66,9 @@ void ReceiversTest::addAndInvokeWithoutCallback(){
 	MockClassReceivers mock("mock");
 	receivers.addReceiver(mock);
 
-	ASSERTM("hasReceivers false", !receivers.hasReceiver());
+	ASSERTM("hasReceiver", receivers.hasReceiver());
+	ASSERTM("hasCallback", !receivers.hasCallback());
+	ASSERTM("canBeInvoked", !receivers.canBeInvoked());
 	receivers.invoke();
 }
 inline

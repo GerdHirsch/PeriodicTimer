@@ -89,7 +89,7 @@ public:
 	}
 private:
 	bool threadToBeActivated(){
-		return receivers.hasCallback() && receivers.hasReceiver() && !threadActive;
+		return receivers.canBeInvoked() && !threadActive;
 	}
 	void startThread(){
 		Thread t(&this_type::run, this);

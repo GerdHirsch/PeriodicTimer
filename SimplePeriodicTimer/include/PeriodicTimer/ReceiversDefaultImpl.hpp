@@ -5,7 +5,7 @@
 
 namespace SimplePeriodicTimer{
 
-template<class Receiver_, std::size_t numReceivers>
+template<class Receiver_, std::size_t maxReceivers>
 class ReceiversDemoImpl{
 public:
 	using Receiver = Receiver_;
@@ -20,7 +20,7 @@ public:
 
 	void addReceiver(Receiver& newReceiver){
 		// no more space available
-		if(currentNumReceivers == numReceivers) return;
+		if(currentNumReceivers == maxReceivers) return;
 
 		// no duplicates
 		for(auto receiver : receivers)
@@ -45,12 +45,17 @@ public:
 			}
 		}
 	}
-	bool hasReceiver() const {
+	bool canBeInvoked() const {
 		return currentNumReceivers != 0 && function != nullptr;
+	}
+	bool hasReceiver() const {
+		return currentNumReceivers != 0;
 	}
 	bool hasCallback(){
 		return function != nullptr;
 	}
+
+
 	std::size_t getCurrentNumberOfReceivers(){
 		return currentNumReceivers;
 	}
@@ -63,7 +68,7 @@ public:
 	}
 private:
 	MemberFunction function = nullptr;
-	Receiver* receivers[numReceivers];
+	Receiver* receivers[maxReceivers];
 	std::size_t currentNumReceivers = 0;
 };
 
