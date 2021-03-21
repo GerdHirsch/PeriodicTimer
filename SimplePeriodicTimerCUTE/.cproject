@@ -33,7 +33,7 @@
 								<option id="gnu.cpp.compiler.option.other.other.311845525" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -Wno-attributes" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1198243213" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cute}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SimplePeriodicTimer/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/PeriodicTimer/include}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.cygwin.2709340" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input.cygwin"/>
 							</tool>
