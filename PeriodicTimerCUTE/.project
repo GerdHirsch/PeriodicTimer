@@ -3,7 +3,7 @@
 	<name>PeriodicTimerCUTE</name>
 	<comment></comment>
 	<projects>
-		<project>SimplePeriodicTimer</project>
+		<project>PeriodicTimer</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
